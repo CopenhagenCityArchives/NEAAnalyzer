@@ -639,7 +639,7 @@ namespace HardHorn.Archiving
 
             if (subelement == null)
             {
-                throw new InvalidOperationException($"Kunne ikke tage læse af det ikke-definrede element {element.Name.LocalName}.{name.LocalName}.");
+                throw new InvalidOperationException($"Kunne ikke tage læse af det ikke-definerede element {element.Name.LocalName}.{name.LocalName}.");
             }
 
             try

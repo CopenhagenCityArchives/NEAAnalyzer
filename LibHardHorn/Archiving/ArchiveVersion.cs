@@ -572,7 +572,7 @@ namespace HardHorn.Archiving
                 {
                     yield return new ArchiveVersionVerificationError() { Message = string.Format("{0} findes i {1}, men er ukendt.", table.Name, Id), Type = ArchiveVersionVerificationError.ErrorType.UnknownTable };
                 }
-            }y
+            }
         }
 
         /// <summary>
@@ -607,6 +607,51 @@ namespace HardHorn.Archiving
         }
 
         /// <summary>
+        /// Get the specified child element of an element, by name.
+        /// </summary>
+        /// <param name="element">The parent element.</param>
+        /// <param name="name">The name of the child element.</param>
+        /// <throws cref="ArgumentNullException">If the given element is null.</throws>
+        /// <returns>The child element.</returns>
+        private XElement GetChildElement(XElement element, XName name)
+        {
+            if (element == null)
+            {
+                throw new ArgumentNullException($"Elementet {element.Name.LocalName} var udefineret, da {element.Name.LocalName}.{name.LocalName} skulle tilgås.");
+            }
+
+            return element.Element(name);
+        }
+
+        /// <summary>
+        /// Get the value of the specified child element, identified by name, and parse the value with the given parser.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="element">The parent element.</param>
+        /// <param name="name">The name of the child element.</param>
+        /// <param name="parser">The parser to parse the value.</param>
+        /// <returns>A parsed value.</returns>
+        /// <throws cref="InvalidOperationException">When the child element doesn't exist.</throws>
+        /// <throws cref="InvalidDataException">When the parser throws an exception.</throws>
+        private T GetChildElementValue<T>(XElement element, XName name, Func<string, T> parser)
+        {
+            var subelement = GetChildElement(element, name);
+
+            if (subelement == null)
+            {
+                throw new InvalidOperationException($"Kunne ikke tage læse af det ikke-definrede element {element.Name.LocalName}.{name.LocalName}.");
+            }
+
+            try
+            {
+                return parser(subelement.Value);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidDataException($"En fejl opstod under læsningen af værdien af {element.Name.LocalName}.{name.LocalName}. Værdien '{subelement.Value}' kunne ikke fortolkes.", ex);
+            }
+        }
+        /// <summary>
         /// Load the given archive index file into this ArchiveVersion instance.
         /// </summary>
         /// <param name="path">The path to the archiveIndex.xml file.</param>
@@ -618,7 +663,7 @@ namespace HardHorn.Archiving
             var archiveIndexDocument = XDocument.Load(path);
             var archiveIndex = archiveIndexDocument.Element(xmlns + "archiveIndex");
 
-            var previousIdElement = archiveIndex.Element(xmlns + "archiveInformationPackageIDPrevious");
+            var previousIdElement = GetChildElement(archiveIndex, xmlns + "archiveInformationPackageIDPrevious");
             if (previousIdElement != null)
             {
                 PreviousId = previousIdElement.Value;
@@ -630,18 +675,18 @@ namespace HardHorn.Archiving
 
             try
             {
-                PeriodStart = DateTime.Parse(archiveIndex.Element(xmlns + "archivePeriodStart").Value);
+                PeriodStart = GetChildElementValue(archiveIndex, xmlns + "archivePeriodStart", DateTime.Parse);
             }
             catch (FormatException)
             {
-                throw new ErrorFieldException("archivePeriodStart", archiveIndex.Element(xmlns + "archivePeriodStart").Value);
+                throw new ErrorFieldException("archivePeriodStart", GetChildElement(archiveIndex, xmlns + "archivePeriodStart").Value);
             }
             
-            PeriodEnd = DateTime.Parse(archiveIndex.Element(xmlns + "archivePeriodEnd").Value);
+            PeriodEnd = GetChildElementValue(archiveIndex, xmlns + "archivePeriodEnd", DateTime.Parse);
 
-            PacketType = bool.Parse(archiveIndex.Element(xmlns + "archiveInformationPacketType").Value);
+            PacketType = GetChildElementValue(archiveIndex, xmlns + "archiveInformationPacketType", bool.Parse);
 
-            var creators = archiveIndex.Element(xmlns + "archiveCreatorList");
+            var creators = GetChildElement(archiveIndex, xmlns + "archiveCreatorList");
             var creatorNames = creators.Elements(xmlns + "creatorName").Select(el => el.Value).ToList();
             var creationPeriodStarts = creators.Elements(xmlns + "creationPeriodStart").Select(el => el.Value).ToList();
             var creationPeriodEnds = creators.Elements(xmlns + "creationPeriodEnd").Select(el => el.Value).ToList();
@@ -670,26 +715,26 @@ namespace HardHorn.Archiving
             }
             ArchiveCreators = archiveCreators;
 
-            PeriodType = bool.Parse(archiveIndex.Element(xmlns + "archiveType").Value);
+            PeriodType = GetChildElementValue(archiveIndex, xmlns + "archiveType", bool.Parse);
 
-            SystemName = archiveIndex.Element(xmlns + "systemName").Value;
+            SystemName = GetChildElement(archiveIndex, xmlns + "systemName").Value;
             AlternativeNames = archiveIndex.Elements(xmlns + "alternativeName").Select(el => el.Value);
-            SystemPurpose = archiveIndex.Element(xmlns + "systemPurpose").Value;
-            SystemContent = archiveIndex.Element(xmlns + "systemContent").Value;
-            RegionNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "regionNum").Value);
-            KommuneNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "komNum").Value);
-            CPRNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "cprNum").Value);
-            MatrikelNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "matrikNum").Value);
-            CVRNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "cvrNum").Value);
-            BBRNumbersUsed = bool.Parse(archiveIndex.Element(xmlns + "bbrNum").Value);
-            WHOCodesUsed = bool.Parse(archiveIndex.Element(xmlns + "whoSygKod").Value);
+            SystemPurpose = GetChildElement(archiveIndex, xmlns + "systemPurpose").Value;
+            SystemContent = GetChildElement(archiveIndex, xmlns + "systemContent").Value;
+            RegionNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "regionNum", bool.Parse);
+            KommuneNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "komNum", bool.Parse);
+            CPRNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "cprNum", bool.Parse);
+            MatrikelNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "matrikNum", bool.Parse);
+            CVRNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "cvrNum", bool.Parse);
+            BBRNumbersUsed = GetChildElementValue(archiveIndex, xmlns + "bbrNum", bool.Parse);
+            WHOCodesUsed = GetChildElementValue(archiveIndex, xmlns + "whoSygKod", bool.Parse);
             SourceNames = archiveIndex.Elements(xmlns + "sourceName").Select(el => el.Value);
             UserNames = archiveIndex.Elements(xmlns + "userName").Select(el => el.Value);
             PredecessorNames = archiveIndex.Elements(xmlns + "predecessorName").Select(el => el.Value);
 
-            var form = archiveIndex.Element(xmlns + "form");
-            FORMVersion = form.Element(xmlns + "formVersion").Value;
-            var classList = form.Element(xmlns + "classList");
+            var form = GetChildElement(archiveIndex, xmlns + "form");
+            FORMVersion = GetChildElement(form, xmlns + "formVersion").Value;
+            var classList = GetChildElement(form, xmlns + "classList");
             var formClasses = classList.Elements(xmlns + "formClass").Select(el => el.Value).ToList();
             var formClassTexts = classList.Elements(xmlns + "formClassText").Select(el => el.Value).ToList();
             var formClassifications = new List<FORMClassification>();
@@ -706,16 +751,16 @@ namespace HardHorn.Archiving
             }
             FORMClassifications = formClassifications;
 
-            ContainsDigitalDocuments = bool.Parse(archiveIndex.Element(xmlns + "containsDigitalDocuments").Value);
-            SearchRelatedOtherRecords = bool.Parse(archiveIndex.Element(xmlns + "searchRelatedOtherRecords").Value);
+            ContainsDigitalDocuments = GetChildElementValue(archiveIndex, xmlns + "containsDigitalDocuments", bool.Parse);
+            SearchRelatedOtherRecords = GetChildElementValue(archiveIndex, xmlns + "searchRelatedOtherRecords", bool.Parse);
             RelatedRecordsNames = archiveIndex.Elements(xmlns + "relatedRecordsName").Select(el => el.Value);
-            SystemFileConcept = bool.Parse(archiveIndex.Element(xmlns + "systemFileConcept").Value);
-            MultipleDataCollection = bool.Parse(archiveIndex.Element(xmlns + "multipleDataCollection").Value);
-            PersonalDataRestrictedInfo = bool.Parse(archiveIndex.Element(xmlns + "personalDataRestrictedInfo").Value);
-            OtherAccessTypeRestrictions = bool.Parse(archiveIndex.Element(xmlns + "otherAccessTypeRestrictions").Value);
-            ArchiveApproval = archiveIndex.Element(xmlns + "archiveApproval").Value;
+            SystemFileConcept = GetChildElementValue(archiveIndex, xmlns + "systemFileConcept", bool.Parse);
+            MultipleDataCollection = GetChildElementValue(archiveIndex, xmlns + "multipleDataCollection", bool.Parse);
+            PersonalDataRestrictedInfo = GetChildElementValue(archiveIndex, xmlns + "personalDataRestrictedInfo", bool.Parse);
+            OtherAccessTypeRestrictions = GetChildElementValue(archiveIndex, xmlns + "otherAccessTypeRestrictions", bool.Parse);
+            ArchiveApproval = GetChildElement(archiveIndex, xmlns + "archiveApproval").Value;
 
-            var archiveRestrictions = archiveIndex.Element(xmlns + "archiveRestrictions");
+            var archiveRestrictions = GetChildElement(archiveIndex, xmlns + "archiveRestrictions");
             if (archiveRestrictions != null)
             {
                 ArchiveRestrictions = archiveRestrictions.Value;

@@ -617,7 +617,7 @@ namespace HardHorn.Archiving
         {
             if (element == null)
             {
-                throw new ArgumentNullException($"Elementet {element.Name.LocalName} var udefineret, da {element.Name.LocalName}.{name.LocalName} skulle tilgås.");
+                throw new ArgumentNullException(name.LocalName, $"Forsøgte at læse {name.LocalName} på et udefineret element.");
             }
 
             return element.Element(name);

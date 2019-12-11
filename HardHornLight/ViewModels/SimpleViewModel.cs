@@ -22,6 +22,16 @@ using System.Windows.Shell;
 
 namespace HardHorn.ViewModels
 {
+    class InitializeForeignKeyTestException : Exception
+    {
+        public InitializeForeignKeyTestException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
+    class InitializeAnalysisException : Exception
+    {
+        public InitializeAnalysisException(string message, Exception innerException) : base(message, innerException) { }
+    }
+
     class SimpleViewModel : PropertyChangedBase
     {
         #region Properties
@@ -771,90 +781,111 @@ namespace HardHorn.ViewModels
 
                 // Add analysis tasks
                 if (PerformAnalysis)
-                    foreach (var table in av.Tables)
+                {
+                    System.Action analysis = () => {
+                        Analyzer.MoveNextTable();
+                        Analyzer.InitializeTable();
+                        taskTotalProgress.Report(Analyzer.TableRowCount);
+                        taskProgress.Report(0);
+
+                        bool readNext = false;
+                        int chunk = 10000;
+                        do
+                        {
+                            readNext = Analyzer.AnalyzeRows(chunk);
+                            taskProgress.Report(Analyzer.TableDoneRows);
+                            analysisProgress.Report(Analyzer.TotalDoneRows);
+                        }
+                        while (readNext);
+
+                        foreach (var report in Analyzer.TestHierachy[Analyzer.CurrentTable].Values)
+                        {
+                            report.SuggestType(HandleNotification);
+                        }
+                    };
+
+                    try
                     {
-                        Tasks.Add(new TaskViewModel($"Analyse af {table.Name}", _ => {
-                            Analyzer.MoveNextTable();
-                            Analyzer.InitializeTable();
-                            taskTotalProgress.Report(Analyzer.TableRowCount);
-                            taskProgress.Report(0);
-
-                            bool readNext = false;
-                            int chunk = 10000;
-                            do
-                            {
-                                readNext = Analyzer.AnalyzeRows(chunk);
-                                taskProgress.Report(Analyzer.TableDoneRows);
-                                analysisProgress.Report(Analyzer.TotalDoneRows);
-                            }
-                            while (readNext);
-
-                            foreach (var report in Analyzer.TestHierachy[Analyzer.CurrentTable].Values)
-                            {
-                                report.SuggestType(HandleNotification);
-                            }
-                        }));
+                        foreach (var table in av.Tables)
+                        {
+                            Tasks.Add(new TaskViewModel($"Analyse af {table.Name}", _ => analysis()));
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        throw new InitializeAnalysisException("En fejl opstod under initialiseringen af data analysen.", ex);
+                    }
+                }
 
                 // Add key test tasks
                 if (PerformKeyTest)
                 {
-                    var keyTest = new ForeignKeyTest(av.Tables, HandleNotification);
-                    ProgressKeyTestTotal = keyTest.TotalRowCount;
-                    NotifyOfPropertyChange("ProgressKeyTestTotal");
-                    int skippedTables = 0;
-                    foreach (var table in av.Tables)
+                    Action<ForeignKeyTest, object> foreignKeyTest = (keyTest, skipped) =>
                     {
-                        // Skip if no foreign keys.
-                        if (table.ForeignKeys == null || table.ForeignKeys.Count == 0)
+                        int? tablesSkipped = skipped as int?;
+                        if (!tablesSkipped.HasValue)
+                            throw new InvalidOperationException("Task error");
+                        bool readNext = false;
+
+                        // move next for each task with no foreign keys
+                        while (tablesSkipped > 0)
                         {
-                            skippedTables++;
-                            continue;
+                            keyTest.MoveNextTable();
+                            tablesSkipped--;
                         }
 
-                        Tasks.Add(new TaskViewModel($"Fremmednøgletest af {table.Name}", skipped =>
+                        // move next for this task
+                        keyTest.MoveNextTable();
+
+                        keyTest.InitializeReferencedValueLoading();
+
+                        taskTotalProgress.Report(keyTest.TableRowCount);
+                        taskProgress.Report(0);
+
+                        while (keyTest.MoveNextForeignKey())
                         {
-                            int? tablesSkipped = skipped as int?;
-                            if (!tablesSkipped.HasValue)
-                                throw new InvalidOperationException("Task error");
-                            bool readNext = false;
-
-                            // move next for each task with no foreign keys
-                            while (tablesSkipped > 0)
-                            {
-                                keyTest.MoveNextTable();
-                                tablesSkipped--;
-                            }
-
-                            // move next for this task
-                            keyTest.MoveNextTable();
-
-                            keyTest.InitializeReferencedValueLoading();
-
-                            taskTotalProgress.Report(keyTest.TableRowCount);
-                            taskProgress.Report(0);
-
-                            while (keyTest.MoveNextForeignKey())
-                            {
-                                do
-                                {
-                                    readNext = keyTest.ReadReferencedForeignKeyValue();
-                                    taskProgress.Report(keyTest.TableDoneRows);
-                                    keyTestProgress.Report(keyTest.TotalDoneRows);
-                                } while (readNext);
-                            }
-
-                            keyTest.InitializeTableTest();
                             do
                             {
-                                readNext = keyTest.ReadForeignKeyValue();
+                                readNext = keyTest.ReadReferencedForeignKeyValue();
                                 taskProgress.Report(keyTest.TableDoneRows);
                                 keyTestProgress.Report(keyTest.TotalDoneRows);
                             } while (readNext);
-                        }, skippedTables));
+                        }
 
-                        skippedTables = 0;
+                        keyTest.InitializeTableTest();
+                        do
+                        {
+                            readNext = keyTest.ReadForeignKeyValue();
+                            taskProgress.Report(keyTest.TableDoneRows);
+                            keyTestProgress.Report(keyTest.TotalDoneRows);
+                        } while (readNext);
+                    };
+
+                    try
+                    {
+                        var keyTest = new ForeignKeyTest(av.Tables, HandleNotification);
+                        ProgressKeyTestTotal = keyTest.TotalRowCount;
+                        NotifyOfPropertyChange("ProgressKeyTestTotal");
+                        int skippedTables = 0;
+                        foreach (var table in av.Tables)
+                        {
+                            // Skip if no foreign keys.
+                            if (table.ForeignKeys == null || table.ForeignKeys.Count == 0)
+                            {
+                                skippedTables++;
+                                continue;
+                            }
+
+                            Tasks.Add(new TaskViewModel($"Fremmednøgletest af {table.Name}", skipped => foreignKeyTest(keyTest, skipped), skippedTables));
+
+                            skippedTables = 0;
+                        }
                     }
+                    catch (Exception ex)
+                    {
+                        throw new InitializeForeignKeyTestException("En fejl opstod under intialiseringen af fremmednøgletesten.", ex);
+                    }
+                    
                 }
 
                 ArchiveVersion = av;
@@ -873,9 +904,22 @@ namespace HardHorn.ViewModels
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }
+            catch (InitializeForeignKeyTestException ex)
+            {
+                SetStatus($"{ex.Message}. {ex.InnerException.Message}");
+                ProgressState = TaskbarItemProgressState.Error;
+                return;
+            }
+            catch (InitializeAnalysisException ex)
+            {
+                SetStatus($"{ex.Message}. {ex.InnerException.Message}");
+                ProgressState = TaskbarItemProgressState.Error;
+                return;
+            }
             catch (Exception ex)
             {
                 SetStatus($"En undtagelse af typen '{ex.GetType()}' forekom under indlæsningen af arkiveringsversionen, med følgende besked: {ex.Message}", LogLevel.ERROR);
+                MessageBox.Show(ex.StackTrace);
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }

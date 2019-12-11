@@ -320,6 +320,7 @@ namespace HardHorn.ViewModels
                     || Notifications_ShowColumnErrors
                     || Notifications_ShowColumnTypeErrors
                     || Notifications_ShowForeignKeyTypeErrors
+
                     || Notifications_ShowTableRowCountErrors)
                 {
                     return null;
@@ -379,6 +380,12 @@ namespace HardHorn.ViewModels
         {
             get { return notifications_ShowTableRowCountErrors; }
             set { notifications_ShowTableRowCountErrors = value; Notifications_RefreshViews(); NotifyOfPropertyChange("Notifications_ShowTableRowCountErrors"); NotifyOfPropertyChange("Notifications_ShowCategoryStructure"); }
+        }
+        bool notifications_ShowForeignKeyReferencedTableMissingErrors = true;
+        public bool Notifications_ShowForeignKeyReferencedTableMissingErrors
+        {
+            get { return notifications_ShowForeignKeyReferencedTableMissingErrors; }
+            set { notifications_ShowForeignKeyReferencedTableMissingErrors = value; Notifications_RefreshViews(); NotifyOfPropertyChange("Notifications_ShowForeignKeyReferencedTableMissingErrors"); NotifyOfPropertyChange("Notifications_ShowCategoryStructure"); }
         }
 
         public CollectionViewSource NotificationsViewSource { get; private set; }
@@ -488,6 +495,7 @@ namespace HardHorn.ViewModels
                 || (noti.Type == NotificationType.AnalysisErrorRepeatingChar && Notifications_ShowRepeatingChar)
                 || (noti.Type == NotificationType.ForeignKeyTestError && Notifications_ShowForeignKeyTestErrors)
                 || (noti.Type == NotificationType.ForeignKeyTestBlank && Notifications_ShowForeignKeyTestBlanks)
+                || (noti.Type == NotificationType.ForeignKeyReferencedTableMissing && Notifications_ShowForeignKeyReferencedTableMissingErrors)
                 || (noti.Type == NotificationType.ParameterSuggestion && Notifications_ShowParameterSuggestions)
                 || (noti.Type == NotificationType.DataTypeSuggestion && Notifications_ShowDatatypeSuggestions)
                 || (noti.Type == NotificationType.XmlError && Notifications_ShowXmlValidationErrors)
@@ -883,7 +891,8 @@ namespace HardHorn.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        throw new InitializeForeignKeyTestException("En fejl opstod under intialiseringen af fremmednøgletesten.", ex);
+                        MessageBox.Show("En fejl opstod under initialiseringen af fremmednøgletests. Alle tests er måske ikke tilføjet.");
+                        //throw new InitializeForeignKeyTestException("En fejl opstod under intialiseringen af fremmednøgletesten.", ex);
                     }
                     
                 }
@@ -906,13 +915,13 @@ namespace HardHorn.ViewModels
             }
             catch (InitializeForeignKeyTestException ex)
             {
-                SetStatus($"{ex.Message}. {ex.InnerException.Message}");
+                SetStatus($"{ex.Message}. {ex.InnerException.Message}", LogLevel.ERROR);
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }
             catch (InitializeAnalysisException ex)
             {
-                SetStatus($"{ex.Message}. {ex.InnerException.Message}");
+                SetStatus($"{ex.Message}. {ex.InnerException.Message}", LogLevel.ERROR);
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }

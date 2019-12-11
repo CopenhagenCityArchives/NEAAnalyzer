@@ -250,6 +250,7 @@
                         <CheckBox Margin="5" IsChecked="{Binding Notifications_ShowColumnTypeErrors}">Datatypefejl</CheckBox>
                         <CheckBox Margin="5" IsChecked="{Binding Notifications_ShowForeignKeyTypeErrors}">Fremmednøgle-datatypefejl</CheckBox>
                         <CheckBox Margin="5" IsChecked="{Binding Notifications_ShowDataTypeIllegalAliasErrors}">Ulovlige datatypeforkortelser</CheckBox>
+                        <CheckBox Margin="5" IsChecked="{Binding Notifications_ShowForeignKeyReferencedTableMissingErrors}">Manglende fremmedtabeller</CheckBox>
                     </StackPanel>
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label FontWeight="Bold">Eksportér...</Label>

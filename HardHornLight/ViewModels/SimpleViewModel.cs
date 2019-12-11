@@ -875,7 +875,7 @@ namespace HardHorn.ViewModels
             }
             catch (Exception ex)
             {
-                SetStatus("En undtagelse forekom under indlæsningen af arkiveringsversionen, med følgende besked: " + ex.Message, LogLevel.ERROR);
+                SetStatus($"En undtagelse af typen '{ex.GetType()}' forekom under indlæsningen af arkiveringsversionen, med følgende besked: {ex.Message}", LogLevel.ERROR);
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }

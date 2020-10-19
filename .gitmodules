@@ -1,0 +1,3 @@
+[submodule "nealib"]
+	path = nealib
+	url = //SVN/Repositories/Git/nealib.git

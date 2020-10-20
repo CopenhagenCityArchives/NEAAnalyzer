@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using HardHorn.Archiving;
+using NEA.Archiving;
 using System.Windows.Media;
 using System.Windows;
-using HardHorn.Analysis;
+using NEA.Analysis;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using System.Data;
 using System.Text.RegularExpressions;
 using OxyPlot;
 using OxyPlot.Series;
-using HardHorn.Utility;
+using NEA.Utility;
 
-namespace HardHorn.Utilities
+namespace NEA.HardHorn.Utilities
 {
     public class ValuesToColumnItemsConverter : IValueConverter
     {
@@ -166,7 +166,7 @@ namespace HardHorn.Utilities
                     return "Fremmednøgletestfejl";
                 case NotificationType.ForeignKeyTestBlank:
                     return "Fremmednøgletestfejl med blanke værdier";
-                case NotificationType.AnalysisErrorRepeatingChar:
+                case NotificationType.AnalysisErrorRepeatingCharacter:
                     return "Gentagne tegn";
                 case NotificationType.AnalysisErrorUnallowedKeyword:
                     return "Html-lignende keywords";

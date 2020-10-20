@@ -1,13 +1,13 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
-using HardHorn.Archiving;
+using NEA.Analysis;
+using NEA.Archiving;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public class ColumnViewModel : PropertyChangedBase
     {

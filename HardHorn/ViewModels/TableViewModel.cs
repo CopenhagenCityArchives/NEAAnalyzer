@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
-using HardHorn.Archiving;
+using NEA.Analysis;
+using NEA.Archiving;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public class BrowseRow : PropertyChangedBase
     {
@@ -208,15 +208,15 @@ namespace HardHorn.ViewModels
 
                             for (int c = 0; c < chunks; c++)
                             {
-                                rowsRead = reader.Read(out posts, (int)chunkSize);
+                                rowsRead = reader.ReadN(out posts, (int)chunkSize, currentOffset);
                                 currentOffset += rowsRead;
                                 browseReadProgress.Report((int)((currentOffset * 100) / browseOffset));
                             }
-                            rowsRead = reader.Read(out posts, (int)chunkExtra);
+                            rowsRead = reader.ReadN(out posts, (int)chunkExtra, currentOffset);
                             currentOffset += rowsRead;
                             browseReadProgress.Report((int)((currentOffset * 100) / browseOffset));
                         }
-                        rowsRead = reader.Read(out posts, (int)browseCount);
+                        rowsRead = reader.ReadN(out posts, (int)browseCount, currentOffset);
                         currentOffset += rowsRead;
                     }
 

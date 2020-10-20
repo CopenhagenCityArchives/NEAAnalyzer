@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace HardHorn.Utilities
+namespace NEA.HardHorn.Utilities
 {
     /// <summary>
     /// Taken from http://msdn.microsoft.com/en-us/magazine/dd419663.aspx#id0090030

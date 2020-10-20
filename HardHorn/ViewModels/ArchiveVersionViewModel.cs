@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using System.ComponentModel;
-using HardHorn.Analysis;
-using HardHorn.Statistics;
-using HardHorn.Archiving;
+using NEA.Analysis;
+using NEA.Statistics;
+using NEA.Archiving;
 using System.IO;
 using System.Collections.ObjectModel;
-using HardHorn.Logging;
-using System.Dynamic;
+using NEA.Logging;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Threading;
-using HardHorn.Utility;
+using NEA.Utility;
 using System.Collections;
 using System.Globalization;
 using System.Web;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     class ProgressLogger : ILogger
     {
@@ -597,7 +596,7 @@ namespace HardHorn.ViewModels
                 case NotificationType.AnalysisErrorUnderflow:
                 case NotificationType.AnalysisErrorFormat:
                 case NotificationType.AnalysisErrorRegex:
-                case NotificationType.AnalysisErrorRepeatingChar:
+                case NotificationType.AnalysisErrorRepeatingCharacter:
                 case NotificationType.AnalysisErrorUnallowedKeyword:
                     if (!AnalysisErrorNotificationIndex.ContainsKey(notification.Column))
                     {
@@ -623,7 +622,7 @@ namespace HardHorn.ViewModels
                         {
                             AnalysisErrorNotificationIndex[notification.Column][testType].Message = notification.Message;
                         }
-                        if (notification.Type == NotificationType.AnalysisErrorRepeatingChar)
+                        if (notification.Type == NotificationType.AnalysisErrorRepeatingCharacter)
                         {
                             AnalysisErrorNotificationIndex[notification.Column][testType].Message = notification.Message;
                         }
@@ -696,7 +695,7 @@ namespace HardHorn.ViewModels
                 || (nvm.Type == NotificationType.DataTypeIllegalAlias && Notifications_ShowDataTypeIllegalAliasErrors)
                 || (nvm.Type == NotificationType.ForeignKeyTypeError && Notifications_ShowForeignKeyTypeErrors)
                 || (nvm.Type == NotificationType.TableRowCountError && Notifications_ShowTableRowCountErrors)
-                || (nvm.Type == NotificationType.AnalysisErrorRepeatingChar && Notifications_ShowRepeatingChar)
+                || (nvm.Type == NotificationType.AnalysisErrorRepeatingCharacter && Notifications_ShowRepeatingChar)
                 || (nvm.Type == NotificationType.AnalysisErrorUnallowedKeyword && Notifications_ShowSuspiciousKeywords);
 
             return includeBySeverity && includeByNotificationType;
@@ -1008,7 +1007,7 @@ function addGlyph(table, columnIndex) {
                     int totalReplacements = 0;
                     do
                     {
-                        readRows = reader.Read(out readPosts, 10000, totalRows);
+                        readRows = reader.ReadN(out readPosts, 10000, totalRows);
                         totalRows += readRows;
                         totalReplacements += replacer.Write(readPosts, readRows);
                         progress.Report(totalRows);
@@ -1050,7 +1049,7 @@ function addGlyph(table, columnIndex) {
                     using (var originalTableReader = new TableReader(table.Table))
                     {
                         Post[,] posts;
-                        int rowsRead = originalTableReader.Read(out posts, 1000);
+                        int rowsRead = originalTableReader.ReadN(out posts, 1000);
                         var replacer = new TableReplacer(table.Table, replacementOperations, stream);
                         replacer.WriteHeader();
                         replacer.Write(posts, rowsRead);
@@ -1059,7 +1058,7 @@ function addGlyph(table, columnIndex) {
                         stream.Seek(0, SeekOrigin.Begin);
                         var replacedTableReader = new TableReader(table.Table, stream);
                         Post[,] replacedPosts;
-                        replacedTableReader.Read(out replacedPosts, rowsRead);
+                        replacedTableReader.ReadN(out replacedPosts, rowsRead);
 
                         ReplacedDataTable.Rows.Clear();
                         for (int row = 0; row < rowsRead; row++)

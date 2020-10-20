@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace HardHorn.Views
+namespace NEA.HardHorn.Views
 {
     /// <summary>
     /// Interaction logic for ColumnTextStatistics.xaml

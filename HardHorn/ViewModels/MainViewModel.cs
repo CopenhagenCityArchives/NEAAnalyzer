@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using System.ComponentModel;
-using HardHorn.Analysis;
-using HardHorn.Statistics;
-using HardHorn.Archiving;
+using NEA.Analysis;
+using NEA.Statistics;
+using NEA.Archiving;
 using System.IO;
 using System.Collections.ObjectModel;
-using HardHorn.Logging;
+using NEA.Logging;
 using System.Dynamic;
 using System.Text.RegularExpressions;
 using System.Windows.Controls;
@@ -16,9 +16,9 @@ using System.Windows.Data;
 using System.Windows;
 using System.Threading.Tasks;
 using System.Threading;
-using HardHorn.Utility;
+using NEA.Utility;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
 
     class MainViewModel : PropertyChangedBase, ILogger

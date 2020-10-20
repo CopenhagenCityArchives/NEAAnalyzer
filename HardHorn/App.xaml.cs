@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace HardHorn
+namespace NEA.HardHorn
 {
     /// <summary>
     /// Interaction logic for App.xaml

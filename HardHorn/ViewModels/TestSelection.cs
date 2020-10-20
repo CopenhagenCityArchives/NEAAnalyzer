@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Archiving;
+using NEA.Archiving;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     [Serializable()]
     public class DataTypeSelection : INotifyPropertyChanged

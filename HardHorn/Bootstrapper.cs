@@ -3,7 +3,7 @@ using Caliburn.Micro;
 using System.Windows.Markup;
 using System.Globalization;
 
-namespace HardHorn
+namespace NEA.HardHorn
 {
     public class Bootstrapper : BootstrapperBase
     {

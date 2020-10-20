@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
-using HardHorn.Archiving;
-using HardHorn.Utility;
+using NEA.Analysis;
+using NEA.Archiving;
+using NEA.Utility;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Xml.Linq;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public class NotificationViewModel : PropertyChangedBase, INotification
     {

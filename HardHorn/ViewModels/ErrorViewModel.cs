@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
-using HardHorn.Archiving;
+using NEA.Analysis;
+using NEA.Archiving;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public abstract class ErrorViewModelBase : PropertyChangedBase
     {

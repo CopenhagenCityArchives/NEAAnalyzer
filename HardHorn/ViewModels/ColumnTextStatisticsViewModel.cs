@@ -1,12 +1,12 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
+using NEA.Analysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public class ColumnTextStatisticsViewModel : Screen
     {

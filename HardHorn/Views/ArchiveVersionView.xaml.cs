@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace HardHorn.Views
+namespace NEA.HardHorn.Views
 {
     /// <summary>
     /// Interaction logic for ArchiveVersionViewModel.xaml
@@ -24,8 +24,7 @@ namespace HardHorn.Views
             InitializeComponent();
         }
 
-        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 
         }
     }

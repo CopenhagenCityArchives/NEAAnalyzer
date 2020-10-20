@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Documents;
  
-namespace HardHorn.Utilities
+namespace NEA.HardHorn.Utilities
 {
     public class GridViewSort
     {

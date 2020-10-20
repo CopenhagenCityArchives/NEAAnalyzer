@@ -1,7 +1,7 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Analysis;
-using HardHorn.Archiving;
-using HardHorn.Logging;
+using NEA.Analysis;
+using NEA.Archiving;
+using NEA.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     class StartTestViewModel : Screen
     {
@@ -89,7 +89,7 @@ namespace HardHorn.ViewModels
                                         test = new Test.Underflow();
                                         break;
                                     case AnalysisTestType.REPEATING_CHAR:
-                                        test = new Test.RepeatingChar();
+                                        test = new Test.RepeatingCharacter();
                                         break;
                                     case AnalysisTestType.UNALLOWED_KEYWORD:
                                         test = new Test.SuspiciousKeyword();
@@ -127,7 +127,7 @@ namespace HardHorn.ViewModels
                 foreach (var column in table.Table.Columns)
                 {
          
-                    Analyzer.AddTest(column, new Test.RepeatingChar());
+                    Analyzer.AddTest(column, new Test.RepeatingCharacter());
                     Analyzer.AddTest(column, new Test.SuspiciousKeyword());
                 }
         }

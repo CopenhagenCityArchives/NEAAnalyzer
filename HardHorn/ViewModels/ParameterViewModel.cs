@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using HardHorn.Archiving;
+using NEA.Archiving;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     public class ParameterViewModel : PropertyChangedBase
     {

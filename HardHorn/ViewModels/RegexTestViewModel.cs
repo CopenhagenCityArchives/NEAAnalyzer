@@ -5,10 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using HardHorn.Archiving;
-using HardHorn.Analysis;
+using NEA.Archiving;
+using NEA.Analysis;
 
-namespace HardHorn.ViewModels
+namespace NEA.HardHorn.ViewModels
 {
     class RegexTestViewModel
     {

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HardHorn.Views
+namespace NEA.HardHorn.Views
 {
     /// <summary>
     /// Interaction logic for RegexTestView.xaml

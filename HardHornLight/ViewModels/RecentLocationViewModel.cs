@@ -1,11 +1,8 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace HardHorn.ViewModels
+using System;
+
+namespace NEA.Analyzer.ViewModels
 {
     public class RecentLocationViewModel : PropertyChangedBase
     {

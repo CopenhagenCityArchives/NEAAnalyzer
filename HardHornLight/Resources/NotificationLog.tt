@@ -3,11 +3,11 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ import namespace="HardHorn.Archiving" #>
-<#@ import namespace="HardHorn.ViewModels" #>
+<#@ import namespace="NEA.Archiving" #>
+<#@ import namespace="NEA.Analyzer.ViewModels" #>
 <#@ import namespace="System.Windows.Data" #>
 <#@ import namespace="System.Web" #>
-<#@ import namespace="HardHorn.Utility" #>
+<#@ import namespace="NEA.Utility" #>
 <!doctype html>
 <html>
 <head>
@@ -396,7 +396,7 @@ private void OutputNotificationRow(INotification notification, bool even)
         case NotificationType.AnalysisErrorUnderflow:
         case NotificationType.AnalysisErrorFormat:
         case NotificationType.AnalysisErrorRegex:
-        case NotificationType.AnalysisErrorRepeatingChar:
+        case NotificationType.AnalysisErrorRepeatingCharacter:
         case NotificationType.AnalysisErrorUnallowedKeyword:
 			OutputAnalysisSamples(notification);
 			break;

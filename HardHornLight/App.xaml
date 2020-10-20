@@ -1,8 +1,8 @@
-﻿<Application x:Class="HardHorn.App"
+﻿<Application x:Class="NEA.Analyzer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HardHorn"
-             xmlns:util="clr-namespace:HardHorn.Utilities">
+             xmlns:local="clr-namespace:NEA.Analyzer"
+             xmlns:util="clr-namespace:NEA.Analyzer.Utilities">
     <Application.Resources>
         <ResourceDictionary>
             <util:StringToLengthConverter x:Key="StringToLengthConverter" />

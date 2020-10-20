@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AE323D14-7514-4480-BC94-0430FEDCD208}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>HardHorn</RootNamespace>
-    <AssemblyName>NEA Analyzer</AssemblyName>
+    <RootNamespace>NEA.Analyzer</RootNamespace>
+    <AssemblyName>Analyzer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -53,10 +53,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>F134A4B60A4FDE95DF10F3B418B77BAF28B9D43C</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9C42BA4AD696FDEF946D169492882084E3C2740F</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>HardHornLight_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Analyzer_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -140,7 +140,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="HardHornLight_TemporaryKey.pfx" />
+    <None Include="Analyzer_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -168,9 +168,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibHardHorn\LibHardHorn.csproj">
-      <Project>{e4e71235-951c-4d4e-865d-50bb1a79653a}</Project>
-      <Name>LibHardHorn</Name>
+    <ProjectReference Include="..\nealib\nealib\nealib.csproj">
+      <Project>{81dbd6ce-c525-45bd-a6da-9b7ae8ddad8c}</Project>
+      <Name>nealib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

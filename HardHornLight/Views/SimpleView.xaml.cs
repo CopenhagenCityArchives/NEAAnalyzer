@@ -1,10 +1,6 @@
-﻿using HardHorn.Analysis;
-using HardHorn.Archiving;
-using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 
-namespace HardHorn.Views
+namespace NEA.Analyzer.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

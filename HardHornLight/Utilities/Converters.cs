@@ -5,17 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using HardHorn.Archiving;
+using NEA.Archiving;
 using System.Windows.Media;
 using System.Windows;
-using HardHorn.Analysis;
+using NEA.Analysis;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using System.Data;
 using System.Text.RegularExpressions;
-using HardHorn.Utility;
+using NEA.Utility;
 
-namespace HardHorn.Utilities
+namespace NEA.Analyzer.Utilities
 {
     public class AdditionConverter : IValueConverter
     {

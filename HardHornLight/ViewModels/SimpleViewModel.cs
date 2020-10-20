@@ -1,26 +1,23 @@
-﻿using System;
+﻿using Caliburn.Micro;
+
+using NEA.Analysis;
+using NEA.Archiving;
+using NEA.Utility;
+using NEA.Logging;
+
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using Caliburn.Micro;
 using System.ComponentModel;
-using HardHorn.Analysis;
-using HardHorn.Statistics;
-using HardHorn.Archiving;
-using System.IO;
 using System.Collections.ObjectModel;
-using HardHorn.Logging;
-using System.Dynamic;
-using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows;
 using System.Threading.Tasks;
-using System.Threading;
-using HardHorn.Utility;
-using System.Web;
 using System.Windows.Shell;
 
-namespace HardHorn.ViewModels
+namespace NEA.Analyzer.ViewModels
 {
     class InitializeForeignKeyTestException : Exception
     {
@@ -42,7 +39,7 @@ namespace HardHorn.ViewModels
             private set { archiveVersion = value; NotifyOfPropertyChange("ArchiveVersion"); NotifyOfPropertyChange("WindowTitle"); }
         }
 
-        public Analyzer Analyzer { get; private set; }
+        public Analysis.Analyzer Analyzer { get; private set; }
 
         public string WindowTitle
         {
@@ -59,6 +56,12 @@ namespace HardHorn.ViewModels
             {
                 if (recentLocations == null)
                 {
+                    if (Properties.Settings.Default.RecentLocations == null)
+                    {
+                        Properties.Settings.Default.RecentLocations = new System.Collections.Specialized.StringCollection();
+                        Properties.Settings.Default.Save();
+                    }
+
                     recentLocations = new ObservableCollection<RecentLocationViewModel>();
                     foreach (var location in Properties.Settings.Default.RecentLocations)
                     {
@@ -492,7 +495,7 @@ namespace HardHorn.ViewModels
                 || (noti.Type == NotificationType.AnalysisErrorBlank && Notifications_ShowBlank)
                 || (noti.Type == NotificationType.AnalysisErrorRegex && Notifications_ShowRegex)
                 || (noti.Type == NotificationType.AnalysisErrorUnallowedKeyword && Notifications_ShowSuspiciousKeywords)
-                || (noti.Type == NotificationType.AnalysisErrorRepeatingChar && Notifications_ShowRepeatingChar)
+                || (noti.Type == NotificationType.AnalysisErrorRepeatingCharacter && Notifications_ShowRepeatingChar)
                 || (noti.Type == NotificationType.ForeignKeyTestError && Notifications_ShowForeignKeyTestErrors)
                 || (noti.Type == NotificationType.ForeignKeyTestBlank && Notifications_ShowForeignKeyTestBlanks)
                 || (noti.Type == NotificationType.ForeignKeyReferencedTableMissing && Notifications_ShowForeignKeyReferencedTableMissingErrors)
@@ -531,7 +534,7 @@ namespace HardHorn.ViewModels
                 case NotificationType.AnalysisErrorUnderflow:
                 case NotificationType.AnalysisErrorFormat:
                 case NotificationType.AnalysisErrorRegex:
-                case NotificationType.AnalysisErrorRepeatingChar:
+                case NotificationType.AnalysisErrorRepeatingCharacter:
                 case NotificationType.AnalysisErrorUnallowedKeyword:
                     if (!AnalysisNotificationsMap.ContainsKey(notification.Column))
                     {
@@ -542,20 +545,20 @@ namespace HardHorn.ViewModels
                     if (AnalysisNotificationsMap[notification.Column].ContainsKey(testType))
                     {
                         AnalysisNotificationsMap[notification.Column][(notification as AnalysisErrorNotification).TestType].Count++;
-                        if (AnalysisNotificationsMap[notification.Column][testType].Sample.Count < Analyzer.SampleSize)
+                        if (AnalysisNotificationsMap[notification.Column][testType].Sample.Count < Analysis.Analyzer.SampleSize)
                         {
                             AnalysisNotificationsMap[notification.Column][testType].Sample.Add((notification as AnalysisErrorNotification).Post);
                         }
-                        else if (random.Next((notification as AnalysisErrorNotification).Post.RowIndex) < Analyzer.SampleSize)
+                        else if (random.Next((notification as AnalysisErrorNotification).Post.RowIndex) < Analysis.Analyzer.SampleSize)
                         {
-                            int index = random.Next(Analyzer.SampleSize);
+                            int index = random.Next(Analysis.Analyzer.SampleSize);
                             AnalysisNotificationsMap[notification.Column][testType].Sample[index] = (notification as AnalysisErrorNotification).Post;
                         }
                         if (notification.Type == NotificationType.AnalysisErrorUnallowedKeyword)
                         {
                             AnalysisNotificationsMap[notification.Column][testType].Message = notification.Message;
                         }
-                        if (notification.Type == NotificationType.AnalysisErrorRepeatingChar)
+                        if (notification.Type == NotificationType.AnalysisErrorRepeatingCharacter)
                         {
                             if (!(AnalysisNotificationsMap[notification.Column][testType].Message.Contains(notification.Message)))
                             {
@@ -725,9 +728,9 @@ namespace HardHorn.ViewModels
                 // Update recents list, since loading was successful.
                 AddRecentLocation(location);
 
-                Analyzer analyzer = await Task.Run(() =>
+                Analysis.Analyzer analyzer = await Task.Run(() =>
                 {
-                    var ana = new Analyzer(av, av.Tables, null);
+                    var ana = new Analysis.Analyzer(av, av.Tables, null);
                     ProgressAnalysisTotal = ana.TotalRowCount;
                     ana.Notify = HandleNotification;
 
@@ -742,7 +745,7 @@ namespace HardHorn.ViewModels
                                     ana.AddTest(column, new Test.Underflow());
                                     ana.AddTest(column, new Test.Overflow());
                                     ana.AddTest(column, new Test.Blank());
-                                    ana.AddTest(column, new Test.RepeatingChar());
+                                    ana.AddTest(column, new Test.RepeatingCharacter());
                                     ana.AddTest(column, new Test.SuspiciousKeyword());
                                     break;
                                 case DataType.CHARACTER_VARYING:
@@ -750,7 +753,7 @@ namespace HardHorn.ViewModels
                                     ana.AddTest(column, new Test.Overflow());
                                     ana.AddTest(column, new Test.Blank());
                                     ana.AddTest(column, new Test.SuspiciousKeyword());
-                                    ana.AddTest(column, new Test.RepeatingChar());
+                                    ana.AddTest(column, new Test.RepeatingCharacter());
                                     break;
                                 case DataType.TIMESTAMP:
                                     ana.AddTest(column, Test.TimestampFormatTest());

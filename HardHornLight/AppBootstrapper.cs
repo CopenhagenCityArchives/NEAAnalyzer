@@ -2,11 +2,8 @@
 using Caliburn.Micro;
 using System.Windows.Markup;
 using System.Globalization;
-using System.Linq;
-using System.Collections.Generic;
-using System;
 
-namespace HardHorn
+namespace NEA.Analyzer
 {
     public class AppBootstrapper : BootstrapperBase
     {

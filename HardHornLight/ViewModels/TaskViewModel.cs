@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace HardHorn.ViewModels
+namespace NEA.Analyzer.ViewModels
 {
     public class TaskViewModel : PropertyChangedBase
     {

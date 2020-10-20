@@ -1,15 +1,10 @@
-﻿using HardHorn.Analysis;
-using HardHorn.Archiving;
-using HardHorn.Utility;
+﻿using NEA.Archiving;
+using NEA.Utility;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace HardHorn.Resources
+namespace NEA.Analyzer.Resources
 {
     public partial class NotificationLog
     {

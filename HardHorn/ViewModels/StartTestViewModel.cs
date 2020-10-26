@@ -98,19 +98,13 @@ namespace NEA.HardHorn.ViewModels
                                         switch (dataTypeSelection.DataType)
                                         {
                                             case DataType.TIMESTAMP:
-                                                test = Test.TimestampFormatTest();
-                                                break;
-                                            case DataType.TIMESTAMP_WITH_TIME_ZONE:
-                                                test = Test.TimestampWithTimeZoneFormatTest();
+                                                  test = new Test.TimestampFormatTest();
                                                 break;
                                             case DataType.DATE:
                                                 test = Test.DateFormatTest();
                                                 break;
                                             case DataType.TIME:
-                                                test = Test.TimeFormatTest();
-                                                break;
-                                            case DataType.TIME_WITH_TIME_ZONE:
-                                                test = Test.TimeWithTimeZoneTest();
+                                                test = new Test.TimestampFormatTest();
                                                 break;
                                             default:
                                                 continue;

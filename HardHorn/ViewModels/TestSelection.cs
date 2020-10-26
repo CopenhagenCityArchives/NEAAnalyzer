@@ -281,7 +281,7 @@ namespace NEA.HardHorn.ViewModels
                 new DataType[] { DataType.CHARACTER, DataType.CHARACTER_VARYING, DataType.NATIONAL_CHARACTER, DataType.NATIONAL_CHARACTER_VARYING },
                 new Analysis.AnalysisTestType[] { Analysis.AnalysisTestType.OVERFLOW, Analysis.AnalysisTestType.UNDERFLOW, Analysis.AnalysisTestType.BLANK }));
             testSelection.Add(new TestSelectionCategory("Tidstyper",
-                new DataType[] { DataType.TIME, DataType.TIME_WITH_TIME_ZONE, DataType.TIMESTAMP, DataType.TIMESTAMP_WITH_TIME_ZONE, DataType.DATE, DataType.INTERVAL },
+                new DataType[] { DataType.TIME, DataType.TIMESTAMP, DataType.DATE, DataType.INTERVAL },
                 new Analysis.AnalysisTestType[] { Analysis.AnalysisTestType.OVERFLOW, Analysis.AnalysisTestType.FORMAT }));
             testSelection.Add(new TestSelectionCategory("Decimaltalstyper",
                 new DataType[] { DataType.DECIMAL, DataType.DOUBLE_PRECISION, DataType.FLOAT, DataType.REAL },

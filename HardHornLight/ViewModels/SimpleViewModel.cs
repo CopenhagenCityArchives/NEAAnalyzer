@@ -756,19 +756,11 @@ namespace NEA.Analyzer.ViewModels
                                     ana.AddTest(column, new Test.RepeatingCharacter());
                                     break;
                                 case DataType.TIMESTAMP:
-                                    ana.AddTest(column, Test.TimestampFormatTest());
-                                    ana.AddTest(column, new  Test.Overflow());
-                                    break;
-                                case DataType.TIMESTAMP_WITH_TIME_ZONE:
-                                    ana.AddTest(column, Test.TimestampWithTimeZoneFormatTest());
+                                    ana.AddTest(column, new Test.TimestampFormatTest());
                                     ana.AddTest(column, new Test.Overflow());
                                     break;
                                 case DataType.TIME:
-                                    ana.AddTest(column, Test.TimeFormatTest());
-                                    ana.AddTest(column, new Test.Overflow());
-                                    break;
-                                case DataType.TIME_WITH_TIME_ZONE:
-                                    ana.AddTest(column, Test.TimeWithTimeZoneTest());
+                                    ana.AddTest(column, new Test.TimeFormatTest());
                                     ana.AddTest(column, new Test.Overflow());
                                     break;
                                 case DataType.INTEGER:

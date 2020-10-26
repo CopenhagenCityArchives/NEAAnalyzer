@@ -903,8 +903,14 @@ namespace NEA.Analyzer.ViewModels
             }
             catch (LoadTableIndexException ex)
             {
-                SetStatus("Tabel-indeks kunne ikke indlæses: " + ex.InnerException.Message, LogLevel.ERROR);
-                Console.WriteLine(ex.InnerException.StackTrace);
+                string message = " ";
+                Exception inner = ex.InnerException;
+                while (inner != null)
+                {
+                    message = $"{inner.GetType()}: {inner.Message}";
+                    inner = inner.InnerException;
+                }
+                SetStatus($"Tabel-indeks kunne ikke indlæses.{message}", LogLevel.ERROR);
                 ProgressState = TaskbarItemProgressState.Error;
                 return;
             }

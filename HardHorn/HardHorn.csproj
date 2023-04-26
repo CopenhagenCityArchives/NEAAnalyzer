@@ -16,7 +16,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>\\ARKIV3\AJAX\KSA PROGRAMMER\Installationsfiler\HardHorn\</PublishUrl>
+    <PublishUrl>\\ksa-monitor\software\ksa\Installationsfiler\HardHorn\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>

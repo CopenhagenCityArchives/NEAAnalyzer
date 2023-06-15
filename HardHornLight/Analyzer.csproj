@@ -178,12 +178,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\nealib\nealib\nealib.csproj">
-      <Project>{81dbd6ce-c525-45bd-a6da-9b7ae8ddad8c}</Project>
-      <Name>nealib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -210,6 +204,12 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>NotificationLog1.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\nealib\nealib\nealib.csproj">
+      <Project>{81dbd6ce-c525-45bd-a6da-9b7ae8ddad8c}</Project>
+      <Name>nealib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

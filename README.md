@@ -14,6 +14,9 @@ The project is based on a special branch of nealib, which is currently stale and
 This reason for this is that most specific functionality was removed from nealib to create a simpler library.
 The classes and methods in nealib->used-by-neaanalyzer used by NEAAnalyzer sould be moved to the NEAAnalyzer source code.
 
+## Offline development
+To develop the application offline simply copy the restored packages from a server with internet access, and then restore it with nuget using the local source.
+
 # Deployment
 The applications are deployed using Clickonce deployment to a local or shared folder, from with the application can be installed.
 
